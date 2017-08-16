@@ -3,8 +3,8 @@ import os
 from util.ScriptsUtil import initLogging
 import logging
 
-problem_u_start = 'nohup scrapy crawl problem_update >'+problem_u_log+' 2>&1 & echo $! >> '+problem_u_pid
-submit_u_start = 'nohup scrapy crawl submit_update >'+submit_u_log+' 2>&1 & echo $! >> '+submit_u_pid
+problem_u_start = 'nohup scrapy crawl problem_update >>'+problem_u_log+' 2>&1 & echo $! >> '+problem_u_pid
+submit_u_start = 'nohup scrapy crawl submit_update >>'+submit_u_log+' 2>&1 & echo $! >> '+submit_u_pid
 
 def update():
     initLogging()
