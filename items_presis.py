@@ -102,10 +102,11 @@ def presis(conn):
 
 def main():
     initLogging()
-    conn = initSubmit()
+#    conn = initSubmit()
+    conn = None
     while True:
         presis(conn)
-        time.sleep(3600)
+        time.sleep(600)
 
 
 main()

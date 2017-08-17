@@ -3,3 +3,6 @@
 /backup/*
 /pid/*
 /.idea/*
+/crawl_state/*
+*.pyc
+*.log

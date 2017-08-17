@@ -4,6 +4,7 @@ import logging
 import os
 
 command = 'kill -2 '
+command1 = 'kill -9 '
 
 def readPid(file_path):
     pid = None
@@ -63,7 +64,7 @@ def pauseSpider():
 
     res = 0
     if pids['presis']:
-        res = os.system(command + pids['presis'])
+        res = os.system(command1 + pids['presis'])
     if not pids['presis']:
         logging.info('[Presis Item does not Run.]')
     elif res == 0:
@@ -71,4 +72,3 @@ def pauseSpider():
     else:
         logging.error("[Pause Presis Item Failed.]")
 
-pauseSpider()

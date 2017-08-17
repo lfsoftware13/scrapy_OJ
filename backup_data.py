@@ -13,13 +13,19 @@ def backup():
         os.makedirs(backup_path)
 
     data_path = os.path.join(backup_path, "scrapyOJ.db")
-    crawl_path = os.path.join(backup_path, "crawl_state")
-    log_path = os.path.join(backup_path, "log")
+    crawl_path = os.path.join(backup_path, "crawl_state/")
+    log_path = os.path.join(backup_path, "log/")
+    redis_path = os.path.join(backup_path, "dump.rdb")
     shutil.copyfile(DATABASE_PATH, data_path)
+    shutil.copyfile("data/dump.rdb", redis_path)
+
+    if os.path.exists(crawl_path):
+        shutil.rmtree(crawl_path)
     shutil.copytree("crawl_state/", crawl_path)
+    if os.path.exists(log_path):
+        shutil.rmtree(log_path)
     shutil.copytree("log/", log_path)
     shutil.rmtree("log/")
     os.makedirs('log/')
     logging.info('[BACKUP]['+backup_path+']')
 
-backup()

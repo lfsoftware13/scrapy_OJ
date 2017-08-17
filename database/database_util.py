@@ -1,8 +1,33 @@
 import sqlite3
 from database.constants import DATABASE_PATH, SUBMIT, PROBLEM
+import time
+import datetime
+import signal
+import sys
 
+
+rdy_exit = 0
+in_submit = 0
+
+
+def signal_handler(signal, frame):
+    global rdy_exit
+    rdy_exit = 1
+    while True:
+        if in_submit == 0:
+            sys.exit(0)
 
 def initSubmit():
+    nt = datetime.datetime.now()
+    sec = nt.second
+    mi = nt.minute
+    ho = nt.hour
+
+    if mi>=59 and sec >= 00:
+        time.sleep(120)
+
+    global in_submit, rdy_exit
+
     conn = sqlite3.connect(DATABASE_PATH)
     checkExist(conn)
     return conn
@@ -10,7 +35,6 @@ def initSubmit():
 
 def close(conn):
     conn.close()
-
 
 def checkExist(conn):
     com = '''CREATE TABLE IF NOT EXISTS '''+SUBMIT+'''
@@ -42,43 +66,46 @@ def checkExist(conn):
     conn.commit()
 
 def insertSubmit(conn, id, submit_url, submit_time, user_id, user_name, problem_id, problem_url, problem_name, problem_full_name,language, status, error_test_id, time, memory):
-    if not conn:
-        conn = initSubmit()
+#    if not conn:
+    conn = initSubmit()
 
     cmd = 'INSERT OR IGNORE INTO submit (id, submit_url, submit_time, user_id, user_name, problem_id, problem_url, problem_name, problem_full_name, language, status, error_test_id, time, memory, code) ' \
           'VALUES ("'+id+'", "'+submit_url+'", "'+submit_time+'", "'+user_id+'", "'+user_name+'", "'+problem_id+'", "'+problem_url+'", "'+problem_name+'", "'+problem_full_name+'", "'+language+'", "'+status+'", ' \
           '"'+error_test_id+'", "'+time+'", "'+memory+'", "")'
     conn.execute(cmd)
     conn.commit()
+    conn.close()
 
 def insertCode(conn, id, code):
-    if not conn:
-        conn = initSubmit()
+    #if not conn:
+    conn = initSubmit()
 
     code = code.replace("'", "''")
     cmd = "UPDATE submit SET code = '''"+code+"''' WHERE id = '"+id+"' "
     conn.execute(cmd)
     conn.commit()
+    conn.close()
 
 def insertProblem(conn, problem_name, problem_url, problem_des_name, tags, submit_urls):
-    if not conn:
-        conn = initSubmit()
+    #if not conn:
+    conn = initSubmit()
 
     cmd = 'INSERT OR IGNORE INTO problem (problem_name, problem_url, problem_des_name, tags, submit_urls) ' \
           'VALUES ("'+problem_name+'", "'+problem_url+'", "'+problem_des_name+'", "'+tags+'", "'+submit_urls+'")'
     conn.execute(cmd)
     conn.commit()
+    conn.close()
 
 def find(conn, table_name, key, value):
-    if not conn:
-        conn = initSubmit()
+#    if not conn:
+    conn = initSubmit()
 
     cmd = "SELECT * FROM "+table_name+" WHERE "+key+"='"+value+"' "
     cur = conn.execute(cmd)
     return cur.fetchall()
 
 def runCommand(conn, cmd):
-    if not conn:
-        conn = initSubmit()
+    #if not conn:
+    conn = initSubmit()
 
     return conn.execute(cmd)
