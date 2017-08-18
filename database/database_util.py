@@ -76,6 +76,17 @@ def insertSubmit(conn, id, submit_url, submit_time, user_id, user_name, problem_
     conn.commit()
     conn.close()
 
+def insertSubmitMany(param):
+    conn = initSubmit()
+
+    cur = conn.cursor()
+
+    cmd = 'INSERT OR IGNORE INTO submit (id, submit_url, submit_time, user_id, user_name, problem_id, problem_url, problem_name, problem_full_name, language, status, error_test_id, time, memory, code)' \
+        'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) '
+    cur.executemany(cmd, param)
+    conn.commit()
+    conn.close()
+
 def insertCode(conn, id, code):
     #if not conn:
     conn = initSubmit()

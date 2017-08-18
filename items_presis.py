@@ -1,11 +1,10 @@
-from redis_database.redis_util import list_pop, list_push
-from database.database_util import insertSubmit, insertCode, runCommand, find, insertProblem, initSubmit
+from redis_database.redis_util import list_pop, list_push, llendb
+from database.database_util import insertSubmit, insertCode, runCommand, find, insertProblem, initSubmit, insertSubmitMany
 from database.constants import SUBMIT, DATABASE_PATH, problem_items_rediskey, submit_items_rediskey, code_items_rediskey, code_notexist_items_rediskey
 import json
-import time
 import logging
-from util.ScriptsUtil import initLogging
-import sqlite3
+from util.ScriptsUtil import initLogging, convert_to_itemlist_ordered
+import time
 
 def presis_submit(conn, sub_json):
     sub_obj = json.loads(sub_json)
@@ -28,12 +27,28 @@ def presis_submit(conn, sub_json):
     logging.info("[PRESISTENT][SUBMIT]["+sub_json+"]")
     return 1
 
+def presis_submit_many():
+    cou = 0
+    sub_list = []
+    for i in range(0, 1000):
+        sub = list_pop(submit_items_rediskey)
+        if sub:
+            cou += 1
+            sub_obj = json.loads(str(sub, encoding="utf-8"))
+            sub_item = convert_to_itemlist_ordered(sub_obj)
+            sub_list.append(sub_item)
+
+    if len(sub_list) > 0:
+        insertSubmitMany(sub_list)
+        logging.info("[PRESISTENT][SUBMIT MANY]["+str(cou)+"]")
+    return 1
+
 def presis_code(conn, code_json):
     code_obj = json.loads(code_json)
 
     id = code_obj['id']
     code = code_obj['code']
-    res = find(conn, SUBMIT, 'id', id)
+#    res = find(conn, SUBMIT, 'id', id)
     if len(find(conn, SUBMIT, 'id', id)) > 0:
         logging.info("[PRESISTENT][CODE][" + code_obj['id'] + "]")
         insertCode(conn, id, code)
@@ -81,12 +96,8 @@ def presis(conn):
         presis_problem(conn, pro_str)
         pro = list_pop(problem_items_rediskey)
 
-    sub = list_pop(submit_items_rediskey)
-    while sub:
-        cou_sub += 1
-        sub_str = str(sub, encoding="utf-8")
-        presis_submit(conn, sub_str)
-        sub = list_pop(submit_items_rediskey)
+    while llendb(submit_items_rediskey) > 100:
+        presis_submit_many()
 
     cod = list_pop(code_items_rediskey)
     while cod:
