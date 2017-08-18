@@ -5,6 +5,7 @@ import json
 import logging
 from util.ScriptsUtil import initLogging, convert_to_itemlist_ordered
 import time
+import os
 
 def presis_submit(conn, sub_json):
     sub_obj = json.loads(sub_json)
@@ -140,6 +141,7 @@ def presis(conn):
 
 def main():
     initLogging()
+    os.chdir('/home/lf/DataCrawl/scrapy_OJ/')
     conn = None
     logging.info('[Item Presistence start success]')
     presis(conn)
