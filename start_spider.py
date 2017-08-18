@@ -36,9 +36,9 @@ def start():
     else:
         logging.error('[Code Spider start failed. Please check '+code_log+']')
 
-    res = os.system(item_presis_start)
-    if res == 0:
-        logging.info('[Item Presistence start success]')
-    else:
-        logging.error('[Item Presistence start failed. Please check '+presis_log+']')
+    # res = os.system(item_presis_start)
+    # if res == 0:
+    #     logging.info('[Item Presistence start success]')
+    # else:
+    #     logging.error('[Item Presistence start failed. Please check '+presis_log+']')
 

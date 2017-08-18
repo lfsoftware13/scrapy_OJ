@@ -136,12 +136,12 @@ def presis(conn):
     while llendb(code_items_rediskey) > 50:
         presis_code_many()
 
-    logging.info('[TURN][PRESISTENCE FINISH. PRESISTENT '+str(cou_pro)+' PROBLEM. PRESISTENT '+str(cou_sub)+' SUBMIT. PRESISTENT '+str(cou_cod)+' CODE.]')
-
+    logging.info('[PRESISTENCE FINISH. PRESISTENT '+str(cou_pro)+' PROBLEM. PRESISTENT '+str(cou_sub)+' SUBMIT. PRESISTENT '+str(cou_cod)+' CODE.]')
 
 def main():
     initLogging()
     conn = None
+    logging.info('[Item Presistence start success]')
     presis(conn)
 
 main()

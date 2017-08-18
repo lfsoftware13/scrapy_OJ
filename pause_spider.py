@@ -62,13 +62,13 @@ def pauseSpider():
     else:
         logging.error("[Pause Code Spider Failed.]")
 
-    res = 0
-    if pids['presis']:
-        res = os.system(command1 + pids['presis'])
-    if not pids['presis']:
-        logging.info('[Presis Item does not Run.]')
-    elif res == 0:
-        logging.info("[Pause Presis Item Success.]")
-    else:
-        logging.error("[Pause Presis Item Failed.]")
+    # res = 0
+    # if pids['presis']:
+    #     res = os.system(command1 + pids['presis'])
+    # if not pids['presis']:
+    #     logging.info('[Presis Item does not Run.]')
+    # elif res == 0:
+    #     logging.info("[Pause Presis Item Success.]")
+    # else:
+    #     logging.error("[Pause Presis Item Failed.]")
 
