@@ -40,8 +40,8 @@ class SubmitSpider(RedisCrawlSpider):
                             )]
 
 
-    def error(self, response):
-        logging.error('[' + str(response.status) + '][FILTER][' + response.url + ']')
+    def error(self, failure):
+        logging.error('[FAILURE][FILTER][FILTER REQUEST FAILED.]')
         global in_request
         in_request = 0
 

@@ -28,8 +28,8 @@ class SubmitSpider(RedisCrawlSpider):
 #        global count_page, count_item
 #        logging.info("[Update Submit Finish. %s Pages and %s ProblemItem were Updated.]", count_page, count_item)
 
-    def error(self, response):
-        logging.error('[' + str(response.status) + '][FILTER][' + response.url + ']')
+    def error(self, failure):
+        logging.error('[FAILURE][FILTER][FILTER REQUEST FAILED.]')
         global in_request
         in_request = 0
 
@@ -45,14 +45,15 @@ class SubmitSpider(RedisCrawlSpider):
             url_bytes = list_pop(submit_u_cookidwait_rediskey)
 
     def parse(self, response):
-        global count_item, count_page
+        global count_page
+        count_item = 0
         if response.status != 200 and response.status != 304:
             logging.error('[' + str(response.status) + '][0][' + response.url + ']')
             list_push(submit_u_error_rediskey, response.url)
             return
 
         trs = response.selector.xpath('//table[@class="status-frame-datatable"]/tr[@data-submission-id]')
-        logging.info('['+str(response.status)+']['+str(len(trs))+']['+response.url+']')
+        #logging.info('['+str(response.status)+']['+str(len(trs))+']['+response.url+']')
 
         opt = response.selector.xpath("//select[@name='verdictName']/option[@selected]/@value")
         global in_request
@@ -100,12 +101,15 @@ class SubmitSpider(RedisCrawlSpider):
             item['memory'] = [s.replace(u'\xa0', '').replace(u'\r\n', '').strip() for s in tds[7].xpath('text()').extract()]
 
             if not self.is_newest(item['submit_time'][0]):
+                logging.info('[' + str(response.status) + '][' + count_item + '][' + response.url + ']')
                 return
 
             count_item += 1
             yield item
             for u in item['submit_url']:
                 list_push(code_start_rediskey, CODEFORCE_DOMAIN+u)
+
+        logging.info('[' + str(response.status) + '][' + count_item + '][' + response.url + ']')
 
         (firstPage, lastPage, activePage, pageNext, firstPageUrl, lastPageUrl, activePageUrl, pageNextUrl) = getPage(response)
 
