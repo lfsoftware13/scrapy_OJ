@@ -97,6 +97,17 @@ def insertCode(conn, id, code):
     conn.commit()
     conn.close()
 
+def insertCodeMany(obj_list):
+    conn = initSubmit()
+    cur = conn.cursor()
+    for o in obj_list:
+        code = o['code'].replace("'", "''")
+        cmd = "UPDATE submit SET code = '''" + code + "''' WHERE id = '" + o['id'] + "' "
+        cur.execute(cmd)
+    conn.commit()
+    conn.close()
+
+
 def insertProblem(conn, problem_name, problem_url, problem_des_name, tags, submit_urls):
     #if not conn:
     conn = initSubmit()
@@ -113,6 +124,15 @@ def find(conn, table_name, key, value):
 
     cmd = "SELECT * FROM "+table_name+" WHERE "+key+"='"+value+"' "
     cur = conn.execute(cmd)
+    return cur.fetchall()
+
+def findIdExist(ids, table_name, key):
+    conn = initSubmit()
+
+    cur = conn.cursor()
+    idstr = ",".join(ids)
+    cmd = "SELECT "+key+" FROM "+ table_name+" WHERE "+key+" in ( "+ idstr + " )"
+    cur.execute(cmd)
     return cur.fetchall()
 
 def runCommand(conn, cmd):

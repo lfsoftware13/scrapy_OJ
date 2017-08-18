@@ -1,5 +1,5 @@
 from redis_database.redis_util import list_pop, list_push, llendb
-from database.database_util import insertSubmit, insertCode, runCommand, find, insertProblem, initSubmit, insertSubmitMany
+from database.database_util import insertSubmit, insertCode, runCommand, find, insertProblem, initSubmit, insertSubmitMany, findIdExist, insertCodeMany
 from database.constants import SUBMIT, DATABASE_PATH, problem_items_rediskey, submit_items_rediskey, code_items_rediskey, code_notexist_items_rediskey
 import json
 import logging
@@ -56,6 +56,40 @@ def presis_code(conn, code_json):
     logging.info("[NOTEXIST][CODE][" + code_obj['id'] + "]")
     return 0
 
+def presis_code_many():
+
+    cod_list = []
+    ids = []
+    for i in range(0, 1000):
+        cod = list_pop(code_items_rediskey)
+        if cod:
+            cod_obj = json.loads(str(cod, encoding="utf-8"))
+            cod_list.append(cod_obj)
+            ids.append(cod_obj['id'])
+
+    exi_res = findIdExist(ids, SUBMIT, 'id')
+    exist_ids = []
+    for e in exi_res:
+        exist_ids.append(e[0])
+
+    cou_exi = 0
+    cou_nexi = 0
+    update_list = []
+    for c in cod_list:
+        if c['id'] not in exist_ids:
+            cou_nexi += 1
+            list_push(code_notexist_items_rediskey, json.dumps(c))
+        else:
+            cou_exi += 1
+            update_list.append(c)
+
+    if len(update_list) > 0:
+        insertCodeMany(update_list)
+        logging.info("[PRESISTENT][CODE MANY][UPDATE "+str(cou_exi)+" CODE ITEMS][REPUSH "+str(cou_nexi)+" CODE ITEMS]")
+    else:
+        logging.info("[PRESISTENT][CODE MANY][UPDATE NOTHING]")
+    return 1
+
 def presis_problem(conn, pro_json):
     pro_obj = json.loads(pro_json)
 
@@ -99,26 +133,16 @@ def presis(conn):
     while llendb(submit_items_rediskey) > 100:
         presis_submit_many()
 
-    cod = list_pop(code_items_rediskey)
-    while cod:
-        cod_str = str(cod, encoding="utf-8")
-        if presis_code(conn, cod_str) == 0:
-            list_push(code_notexist_items_rediskey, cod_str)
-        else:
-            cou_cod += 1
-        cod = list_pop(code_items_rediskey)
+    while llendb(code_items_rediskey) > 50:
+        presis_code_many()
 
     logging.info('[TURN][PRESISTENCE FINISH. PRESISTENT '+str(cou_pro)+' PROBLEM. PRESISTENT '+str(cou_sub)+' SUBMIT. PRESISTENT '+str(cou_cod)+' CODE.]')
 
 
 def main():
     initLogging()
-#    conn = initSubmit()
     conn = None
-    while True:
-        presis(conn)
-        time.sleep(600)
-
+    presis(conn)
 
 main()
 
