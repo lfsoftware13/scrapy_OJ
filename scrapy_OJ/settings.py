@@ -105,3 +105,5 @@ REDIS_PORT = 6379
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
 IS_UPDATE = 0
+
+HTTPERROR_ALLOW_ALL = True
