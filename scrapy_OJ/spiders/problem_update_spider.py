@@ -20,9 +20,9 @@ class ProblemSpider(RedisCrawlSpider):
     allowed_domains = ['codeforces.com']
     redis_key = problem_u_start_rediskey
 
-    def spider_idle(self):
-        global count_page, count_item
-        logging.info("[Update Problem Finish. %s Pages and %s ProblemItem were Updated.]", count_page, count_item)
+#    def spider_idle(self):
+#        global count_page, count_item
+#        logging.info("[Update Problem Finish. %s Pages and %s ProblemItem were Updated.]", count_page, count_item)
 
     def parse(self, response):
         global count_page, count_item

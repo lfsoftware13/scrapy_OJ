@@ -24,9 +24,9 @@ class SubmitSpider(RedisCrawlSpider):
         yes_time = (datetime.datetime.now()-one_day).replace(hour=0, minute=0, second=0, microsecond=0)
         return yes_time < sub_time
 
-    def spider_idle(self):
-        global count_page, count_item
-        logging.info("[Update Submit Finish. %s Pages and %s ProblemItem were Updated.]", count_page, count_item)
+#    def spider_idle(self):
+#        global count_page, count_item
+#        logging.info("[Update Submit Finish. %s Pages and %s ProblemItem were Updated.]", count_page, count_item)
 
     def error(self, response):
         logging.error('[' + str(response.status) + '][FILTER][' + response.url + ']')
