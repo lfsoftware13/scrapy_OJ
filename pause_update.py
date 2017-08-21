@@ -9,6 +9,7 @@ command_9 = "kill -9 "
 
 def pauseUpdate():
     initLogging()
+    os.chdir('/home/lf/DataCrawl/scrapy_OJ')
     pro_pid = readPid(problem_u_pid)
     sub_pid = readPid(submit_u_pid)
 

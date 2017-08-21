@@ -101,7 +101,7 @@ class SubmitSpider(RedisCrawlSpider):
             item['memory'] = [s.replace(u'\xa0', '').replace(u'\r\n', '').strip() for s in tds[7].xpath('text()').extract()]
 
             if not self.is_newest(item['submit_time'][0]):
-                logging.info('[' + str(response.status) + '][' + count_item + '][' + response.url + ']')
+                logging.info('[' + str(response.status) + '][' + str(count_item) + '][' + response.url + ']')
                 return
 
             count_item += 1
@@ -109,7 +109,7 @@ class SubmitSpider(RedisCrawlSpider):
             for u in item['submit_url']:
                 list_push(code_start_rediskey, CODEFORCE_DOMAIN+u)
 
-        logging.info('[' + str(response.status) + '][' + count_item + '][' + response.url + ']')
+        logging.info('[' + str(response.status) + '][' + str(count_item) + '][' + response.url + ']')
 
         (firstPage, lastPage, activePage, pageNext, firstPageUrl, lastPageUrl, activePageUrl, pageNextUrl) = getPage(response)
 
