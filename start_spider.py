@@ -5,7 +5,7 @@ import logging
 
 problem_start = 'nohup /home/lf/anaconda3/bin/scrapy crawl problem -s JOBDIR='+problem_job+'>>'+problem_log+' 2>&1 & echo $! >> '+problem_pid
 submit_start = 'nohup /home/lf/anaconda3/bin/scrapy crawl submit -s JOBDIR='+submit_job+'>>'+submit_log+' 2>&1 & echo $! >> '+submit_pid
-code_start = 'nohup /home/lf/anaconda3/bin/scrapy crawl code -s DOWNLOAD_DELAY=0.5 -s JOBDIR='+code_job+' >>'+code_log+' 2>&1 & echo $! >> '+code_pid
+code_start = 'nohup /home/lf/anaconda3/bin/scrapy crawl code -s DOWNLOAD_DELAY=0.25 -s JOBDIR='+code_job+' >>'+code_log+' 2>&1 & echo $! >> '+code_pid
 
 item_presis_start = 'nohup /home/lf/anaconda3/bin/python items_presis.py >>'+presis_log+' 2>&1 & echo $! >> '+presis_pid
 

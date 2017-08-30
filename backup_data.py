@@ -1,5 +1,5 @@
 import os
-from database.constants import DATABASE_PATH
+from database.constants import DATABASE_PATH, CODEDATA_PATH
 import time
 import shutil
 from util.ScriptsUtil import initLogging
@@ -16,7 +16,14 @@ def backup():
     crawl_path = os.path.join(backup_path, "crawl_state/")
     log_path = os.path.join(backup_path, "log/")
     redis_path = os.path.join(backup_path, "dump.rdb")
+    code_path = os.path.join(CODEDATA_PATH, 'scrapyOJ.db')
+
+    if not os.path.exists(CODEDATA_PATH):
+        os.makedirs(CODEDATA_PATH)
+    if os.path.exists(code_path):
+        os.remove(code_path)
     shutil.copyfile(DATABASE_PATH, data_path)
+    shutil.copyfile(DATABASE_PATH, code_path)
     shutil.copyfile("data/dump.rdb", redis_path)
 
     if os.path.exists(crawl_path):
@@ -28,4 +35,3 @@ def backup():
     shutil.rmtree("log/")
     os.makedirs('log/')
     logging.info('[BACKUP]['+backup_path+']')
-

@@ -1,4 +1,5 @@
 DATABASE_PATH = 'data/scrapyOJ.db'
+CODEDATA_PATH = 'release_data/'
 SUBMIT = 'submit'
 PROBLEM = 'problem'
 

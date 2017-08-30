@@ -6,3 +6,4 @@
 /crawl_state/*
 *.pyc
 *.log
+/release_data/*
