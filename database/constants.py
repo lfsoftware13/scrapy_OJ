@@ -3,6 +3,8 @@ CODEDATA_PATH = 'release_data/'
 SUBMIT = 'submit'
 PROBLEM = 'problem'
 
+SEMANTIC_TRAIN_DATABASE = 'data/train_data.db'
+
 CODEFORCE_DOMAIN = "http://codeforces.com"
 
 problem_start_rediskey = "problem_spider:start_urls"
@@ -17,6 +19,10 @@ submit_items_rediskey = "submit_spider:submit_items"
 code_start_rediskey = "code_spider:start_urls"
 code_error_rediskey = "code_spider:error_urls"
 code_items_rediskey = "code_spider:code_items"
+
+code_testcase_start_rediskey = "code_testcase_spider:start_urls"
+code_testcase_error_rediskey = "code_testcase_spider:error_urls"
+code_testcase_items_rediskey = "code_testcase_spider:code_items"
 
 code_notexist_items_rediskey = "code_spider:code_notexist_items"
 

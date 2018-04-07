@@ -71,6 +71,7 @@ ITEM_PIPELINES = {
     'scrapy_OJ.pipelines.SubmitPipeline': 300,
     'scrapy_OJ.pipelines.CodePipeline': 301,
     'scrapy_OJ.pipelines.ProblemPipeline': 302,
+    'scrapy_OJ.pipelines.CodeTestcasePipeline': 303,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

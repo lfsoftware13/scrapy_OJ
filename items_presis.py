@@ -1,6 +1,6 @@
 from redis_database.redis_util import list_pop, list_push, llendb
-from database.database_util import insertSubmit, insertCode, runCommand, find, insertProblem, initSubmit, insertSubmitMany, findIdExist, insertCodeMany
-from database.constants import SUBMIT, DATABASE_PATH, problem_items_rediskey, submit_items_rediskey, code_items_rediskey, code_notexist_items_rediskey
+from database.database_util import insertSubmit, insertCode, runCommand, find, insertProblem, initSubmit, insertSubmitMany, findIdExist, insertCodeMany, insertCodeTestcaseMany
+from database.constants import SUBMIT, DATABASE_PATH, problem_items_rediskey, submit_items_rediskey, code_items_rediskey, code_notexist_items_rediskey, code_testcase_items_rediskey
 import json
 import logging
 from util.ScriptsUtil import initLogging, convert_to_itemlist_ordered
@@ -91,6 +91,43 @@ def presis_code_many():
         logging.info("[PRESISTENT][CODE MANY][UPDATE NOTHING]")
     return 1
 
+
+def presis_code_testcase_many():
+
+    cod_list = []
+    ids = []
+    for i in range(0, 1000):
+        cod = list_pop(code_testcase_items_rediskey)
+        if cod:
+            cod_obj = json.loads(str(cod, encoding="utf-8"))
+            cod_obj['testcase'] = json.dumps(cod_obj['testcase'])
+            cod_list.append(cod_obj)
+            ids.append(cod_obj['id'])
+
+    # exi_res = findIdExist(ids, SUBMIT, 'id')
+    # exist_ids = []
+    # for e in exi_res:
+    #     exist_ids.append(e[0])
+
+    cou_exi = 0
+    cou_nexi = 0
+    update_list = []
+    for c in cod_list:
+        # if c['id'] not in exist_ids:
+        #     cou_nexi += 1
+        #     list_push(code_notexist_items_rediskey, json.dumps(c))
+        # else:
+            cou_exi += 1
+            update_list.append(c)
+
+    if len(update_list) > 0:
+        insertCodeTestcaseMany(update_list)
+        logging.info("[PRESISTENT][CODE TESTCASE MANY][UPDATE "+str(cou_exi)+" CODE TESTCASE ITEMS][REPUSH "+str(cou_nexi)+" CODE ITEMS]")
+    else:
+        logging.info("[PRESISTENT][CODE TESTCASE MANY][UPDATE NOTHING]")
+    return 1
+
+
 def presis_problem(conn, pro_json):
     pro_obj = json.loads(pro_json)
 
@@ -146,5 +183,13 @@ def main():
     logging.info('[Item Presistence start success]')
     presis(conn)
 
-main()
+
+def main_testcase():
+    initLogging()
+    os.chdir('/home/lf/DataCrawl/scrapy_OJ/')
+    while llendb(code_testcase_items_rediskey) > 0:
+        presis_code_testcase_many()
+
+if __name__ == '__main__':
+    main()
 

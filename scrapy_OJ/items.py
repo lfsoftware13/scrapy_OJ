@@ -33,6 +33,13 @@ class CodeItem(scrapy.Item):
     code = scrapy.Field()
 
 
+class CodeTestcaseItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    id = scrapy.Field()
+    testcase = scrapy.Field()
+
+
 class ProblemItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()

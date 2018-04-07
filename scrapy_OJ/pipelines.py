@@ -7,11 +7,11 @@
 
 from database.database_util import insertSubmit, insertCode
 from scrapy_OJ.spiders.code_spider import code_conn
-from scrapy_OJ.items import SubmitItem, CodeItem, ProblemItem
+from scrapy_OJ.items import SubmitItem, CodeItem, ProblemItem, CodeTestcaseItem
 import json
 import scrapy
 from redis_database.redis_util import list_push
-from database.constants import problem_items_rediskey, submit_items_rediskey, code_items_rediskey
+from database.constants import problem_items_rediskey, submit_items_rediskey, code_items_rediskey, code_testcase_items_rediskey
 
 
 def item_to_json(item):
@@ -32,6 +32,18 @@ class CodePipeline(object):
         json_item = item_to_json(item)
         if json_item:
             list_push(code_items_rediskey, json_item)
+
+        return item
+
+
+class CodeTestcasePipeline(object):
+    def process_item(self, item, spider):
+        if not isinstance(item, CodeTestcaseItem):
+            return item
+
+        json_item = item_to_json(item)
+        if json_item:
+            list_push(code_testcase_items_rediskey, json_item)
 
         return item
 
