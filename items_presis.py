@@ -191,5 +191,5 @@ def main_testcase():
         presis_code_testcase_many()
 
 if __name__ == '__main__':
-    main()
+    main_testcase()
 
