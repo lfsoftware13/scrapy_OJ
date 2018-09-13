@@ -1,5 +1,6 @@
 import sqlite3
-from database.constants import DATABASE_PATH, SUBMIT, PROBLEM, SEMANTIC_TRAIN_DATABASE
+from database.constants import DATABASE_PATH, SUBMIT, PROBLEM, SEMANTIC_TRAIN_DATABASE, PROBLEM_TESTCASE, \
+    PROBLEM_TESTCASE_DATABASE
 import time
 import datetime
 import signal
@@ -109,11 +110,15 @@ def insertCodeMany(obj_list):
 
 # ----------- special ----------- #
 def insertCodeTestcaseMany(obj_list):
-    conn = sqlite3.connect(SEMANTIC_TRAIN_DATABASE)
+    # conn = sqlite3.connect(SEMANTIC_TRAIN_DATABASE)
+    conn = sqlite3.connect(PROBLEM_TESTCASE_DATABASE)
     cur = conn.cursor()
     for o in obj_list:
         testcase = o['testcase'].replace("'", "''")
-        cmd = "UPDATE cpp_testcase_error_records SET testcase = '''" + testcase + "''' WHERE id = '" + o['id'] + "' "
+        # print('testcase: ', testcase)
+        # print('id: ', o['id'])
+        # cmd = "UPDATE cpp_testcase_error_records SET testcase = '''" + testcase + "''' WHERE id = '" + o['id'] + "' "
+        cmd = "UPDATE problem_testcase SET testcase = '''" + testcase + "''' WHERE id = '" + o['id'] + "' "
         cur.execute(cmd)
     conn.commit()
     conn.close()

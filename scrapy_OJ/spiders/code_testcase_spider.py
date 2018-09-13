@@ -36,12 +36,12 @@ class CodeTestcaseSpider(RedisCrawlSpider):
 
         logging.info('[' + str(response.status) + '][' + str(len(inputs)) + '][' + response.url + ']')
 
-        print('infolines: ', infos)
-        print('verdicts: ', verdicts)
-        print('inputs: ', inputs)
-        print('outputs: ', outputs)
-        print('answers: ', answers)
-        print('checkers: ', checkers)
+        # print('infolines: ', infos)
+        # print('verdicts: ', verdicts)
+        # print('inputs: ', inputs)
+        # print('outputs: ', outputs)
+        # print('answers: ', answers)
+        # print('checkers: ', checkers)
 
         url = response.url
         id = (url.split('/')[-1])

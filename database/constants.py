@@ -2,8 +2,10 @@ DATABASE_PATH = 'data/scrapyOJ.db'
 CODEDATA_PATH = 'release_data/'
 SUBMIT = 'submit'
 PROBLEM = 'problem'
+PROBLEM_TESTCASE = 'problem_testcase'
 
 SEMANTIC_TRAIN_DATABASE = 'data/train_data.db'
+PROBLEM_TESTCASE_DATABASE = 'data/problem_testcase.db'
 
 CODEFORCE_DOMAIN = "http://codeforces.com"
 

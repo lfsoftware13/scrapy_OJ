@@ -122,6 +122,7 @@ def presis_code_testcase_many():
 
     if len(update_list) > 0:
         insertCodeTestcaseMany(update_list)
+        # print('ids: ', ids)
         logging.info("[PRESISTENT][CODE TESTCASE MANY][UPDATE "+str(cou_exi)+" CODE TESTCASE ITEMS][REPUSH "+str(cou_nexi)+" CODE ITEMS]")
     else:
         logging.info("[PRESISTENT][CODE TESTCASE MANY][UPDATE NOTHING]")
